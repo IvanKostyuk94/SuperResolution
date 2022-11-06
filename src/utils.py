@@ -1,7 +1,16 @@
 import os
 
+
 # Function to write the batch skript for training the network
 def write_batch_skript(training_skript, path_to_run, gpu_type):
+    """Write the batch skript to be submitted in order to train the network
+
+    Args:
+        training_skript (str): Python file to run
+        path_to_run (str): Path in which to safe the training run
+        gpu_type (str): Which GPU type should be used
+                    Options: gtx5000 or v100
+    """
     job_output_dir = os.path.join(path_to_run, "batch_output")
     out_path = os.path.join(job_output_dir, "tjob.out.%j")
     err_path = os.path.join(job_output_dir, "tjob.err.%j")
@@ -72,6 +81,11 @@ module load anaconda
 
 # Funktion to create the run_dir and all its subdirs
 def init_rundir(path_to_run):
+    """Function to initialize all directories for the training run
+
+    Args:
+        path_to_run (str): Path where the results of the run should be stored
+    """
     os.mkdir(path_to_run)
 
     job_output_dir = os.path.join(path_to_run, "batch_output")
@@ -100,39 +114,21 @@ def init_rundir(path_to_run):
     return
 
 
-def move_files(training_skript, run_dir, configfile, networks, losses):
+def move_files(run_dir, training_skript="run.py", configfile="config.py"):
+    """Move the config file and training skript to the run dir before training the network
+
+    Args:
+        run_dir (str): Path to the directory where the network should be trained
+        configfile (str): Name of the configuration file. Defaults to config.py
+        training_skript (str): Name of the network training skript: Defaults to run.py
+    """
     base_dir = os.getcwd()
-    config_dir = os.path.join(base_dir, "configs")
-    # code_dir = os.path.join(base_dir, 'building_blocks')
-    network_dir = os.path.join(base_dir, "networks")
-    loss_dir = os.path.join(base_dir, "loss")
 
     origin_training_skript = os.path.join(base_dir, training_skript)
     dest_training_skript = run_dir
     os.system(f"cp {origin_training_skript} {dest_training_skript}")
 
-    origin_configfile = os.path.join(config_dir, configfile)
+    origin_configfile = os.path.join(base_dir, configfile)
     dest_configfile = run_dir
     os.system(f"cp {origin_configfile} {dest_configfile}")
-
-    # dest_code = os.path.join(run_dir, code)
-    # for skript in code:
-    #     origin_skript = os.path.join(code_dir, skript)
-    #     os.system(f'cp {origin_skript} {dest_code}')
-
-    dest_networks = os.path.join(run_dir, "networks")
-    for network in networks:
-        origin_network = os.path.join(network_dir, network)
-        os.system(f"cp {origin_configfile} {dest_networks}")
-
-    dest_loss = os.path.join(run_dir, "loss")
-    for loss in losses:
-        origin_loss = os.path.join(loss_dir, loss)
-        os.system(f"cp {origin_loss} {dest_loss}")
-
     return
-
-
-if __name__ == "__main__":
-    path = "/u/ivkos/new_sr/test"
-    init_rundir(path)
