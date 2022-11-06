@@ -15,11 +15,11 @@ def first_critic_loss(hr_tiles, sr_tiles, lr_tiles, first_critic_model):
     )[0]
     slopes = tf.sqrt(tf.reduce_sum(tf.square(gradients), axis=[1, 2]))
     gradient_penalty = tf.reduce_mean((slopes - 1.0) ** 2)
-    return (
-        tf.reduce_mean(first_critic_model((sr_tiles, lr_tiles)))
-        - tf.reduce_mean(first_critic_model((hr_tiles, lr_tiles)))
-        + Lambda * gradient_penalty
-    )
+    # return (
+    #     tf.reduce_mean(first_critic_model((sr_tiles, lr_tiles)))
+    #     - tf.reduce_mean(first_critic_model((hr_tiles, lr_tiles)))
+    #     + Lambda * gradient_penalty
+    # )
     return (
         tf.reduce_mean(first_critic_model((sr_tiles, lr_tiles)))
         - tf.reduce_mean(first_critic_model((hr_tiles, lr_tiles)))
