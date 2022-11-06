@@ -3,7 +3,7 @@ import run_tracker
 import full_model
 
 # Function which takes 
-class step:
+class Step:
 
     def __init__(self, full_model, run_tracker):
         self.model = full_model
