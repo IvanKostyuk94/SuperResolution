@@ -16,11 +16,21 @@ class FullModel:
         Initialize the full model you want to train, can contain 1-4 individual networks
 
         Args:
-            first_generator (function): Generator, in case of a non-GAN approach it is simply the CNN
-            loss (function): Function used for the loss
-            first_critic (function, optional): Needed if using a GAN approach. Defaults to None.
-            second_generator (function, optional): Needed if using a multipass network approach. Defaults to None.
-            second_critic (function, optional): Needed if using both GAN and multipass approach. Defaults to None.
+            first_generator (tensorflow.python.keras.engine.training.Model):
+                            Generator, in case of a non-GAN approach it is simply the CNN
+                            
+            loss (tensorflow.python.keras.engine.training.Model):
+                            Function used for the loss
+                            
+            first_critic (tensorflow.python.keras.engine.training.Model, optional):
+                            Needed if using a GAN approach. Defaults to None.
+                            
+            second_generator (tensorflow.python.keras.engine.training.Model, optional):
+                            Needed if using a multipass network approach. Defaults to None.
+                            
+            second_critic (tensorflow.python.keras.engine.training.Model, optional):
+                            Needed if using both GAN and multipass approach. Defaults to None.
+                            
             is_multipass (bool, optional): Is this a multipass network. Defaults to False.
             is_gan (bool, optional): Is a GAN approach used. Defaults to False.
         """
@@ -37,7 +47,8 @@ class FullModel:
 
         self.number_of_nets = self._number_of_nets()
 
-    # Returns a tuple with the number of generators and critics in the model
+    def _create_model(network)
+
     def _number_of_nets(self):
         """Tells how many individual networks the model uses
 
