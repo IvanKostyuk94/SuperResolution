@@ -5,6 +5,11 @@ import csv
 # Class which tracks the whole run i.e. it creates the folder to write
 # the checkpoints to and writes loss, gradients etc. to the corresponding files
 class RunTracker:
+    """
+    Class which tracks the whole run i.e. it creates the folder to write
+    the checkpoints to and writes loss, gradients etc. to the corresponding files
+    """
+
     def __init__(
         self,
         run_dir,
@@ -13,6 +18,19 @@ class RunTracker:
         tracked_loss_prop=["epoch", "avg_loss_gen1"],
         tracked_grad_prop=["epoch", "avg_grad_gen1"],
     ):
+        """
+        Initialize the the run tracker
+
+
+        Args:
+            run_dir (str): Directory of the run
+            track_loss (bool, optional): Should the loss be tracked? Defaults to True.
+            track_gradient (bool, optional): Should the gradients be tracked? Defaults to True.
+            tracked_loss_prop (list, optional): Which losses and connected properties should be tracked.
+                                                Defaults to ["epoch", "avg_loss_gen1"].
+            tracked_grad_prop (list, optional): Which gradients and connected properties should be tracked.
+                                                Defaults to ["epoch", "avg_grad_gen1"].
+        """
 
         self.run_dir = run_dir
         self.check_dir = os.path.join(self.run_dir, "checkpoints")
@@ -40,7 +58,7 @@ class RunTracker:
                     writer.writerow(self.tracked_loss_prop)(
                         f"Created the rundirectory at {self.run_dir}"
                     )
-                print(f"Created loss file")
+                print("Created loss file")
 
         if self.track_gradient:
             self.grad_file = os.path.join(self.run_dir, f"grad.csv")
@@ -48,7 +66,7 @@ class RunTracker:
                 with open(self.grad_file, "w", newline="") as grad_file:
                     writer = csv.writer(grad_file)
                     writer.writerow(self.tracked_grad_prop)
-                print(f"Created grad file")
+                print("Created grad file")
 
     # Updates loss file by writing the line with additional info
     def update_loss(self, data):
@@ -77,6 +95,15 @@ class RunTracker:
             )
 
     def get_tracked_properties(self, prop_type):
+        """
+        Prints which properties are being tracked
+
+        Args:
+            prop_type (str): loss or grad (gradient)
+
+        Returns:
+            list: List of properties being tracked
+        """
         if prop_type == "loss":
             return self.tracked_loss_prop
         elif prop_type == "grad":

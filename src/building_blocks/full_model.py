@@ -12,6 +12,18 @@ class FullModel:
         is_multipass=False,
         is_gan=False,
     ):
+        """
+        Initialize the full model you want to train, can contain 1-4 individual networks
+
+        Args:
+            first_generator (function): Generator, in case of a non-GAN approach it is simply the CNN
+            loss (function): Function used for the loss
+            first_critic (function, optional): Needed if using a GAN approach. Defaults to None.
+            second_generator (function, optional): Needed if using a multipass network approach. Defaults to None.
+            second_critic (function, optional): Needed if using both GAN and multipass approach. Defaults to None.
+            is_multipass (bool, optional): Is this a multipass network. Defaults to False.
+            is_gan (bool, optional): Is a GAN approach used. Defaults to False.
+        """
 
         self.first_generator = first_generator
         self.first_critic = first_critic
@@ -27,6 +39,11 @@ class FullModel:
 
     # Returns a tuple with the number of generators and critics in the model
     def _number_of_nets(self):
+        """Tells how many individual networks the model uses
+
+        Returns:
+            tuple: (number of generators, number of critics)
+        """
         if self.second_generator is None:
             no_gen = 1
         else:
@@ -43,6 +60,18 @@ class FullModel:
     # A simple step in case we do not use a GAN
     @tf.function
     def generator_step(self, lr_tensor, hr_tensor, first_or_second="first"):
+        """
+        Only to be used in a non-gan training or if critic and generator should not be updated with
+        the same frequency.
+
+        Args:
+            lr_tensor (tf.tensor): Low resolution tensor used for the input
+            hr_tensor (tf.tensor): High resolution tensor used to compute the loss
+            first_or_second (str): Only needed for multipass approach. Is this a first or second generator step.
+
+        Returns:
+            tuple: (computed loss, tensor of gradients updating the network parameters)
+        """
         if self.is_gan is True:
             raise NotImplementedError(
                 "This is a gan model a generator step is only implemented in combination with a critic step"
@@ -69,12 +98,23 @@ class FullModel:
         generator.optimizer.apply_gradients(
             zip(gradients, generator.trainable_variables)
         )
-
         return (loss, gradients)
 
     # Step used to optimize the critic while leaving the generator untouched
     @tf.function
     def critic_step(self, lr_tensor, hr_tensor, first_or_second="first"):
+        """
+        Only to be used if critic and generator should not be updated with
+        the same frequency.
+
+        Args:
+            lr_tensor (tf.tensor): Low resolution tensor used for the input
+            hr_tensor (tf.tensor): High resolution tensor used to compute the loss
+            first_or_second (str): Only needed for multipass approach. Is this a first or second generator step.
+
+        Returns:
+            tuple: (computed loss, tensor of gradients updating the network parameters)
+        """
         if self.is_gan is False:
             raise NotImplementedError(
                 "This is not a gan model therefore a critic step is not implemented"
@@ -109,6 +149,19 @@ class FullModel:
     # Step used to optimize both the generator and the critic
     @tf.function
     def full_step(self, lr_tensor, hr_tensor, first_or_second="first"):
+        """
+        Only to be used in GAN approach and if critic and generator should be updated with the same frequency
+
+        Args:
+            lr_tensor (tf.tensor): Low resolution tensor used for the input
+            hr_tensor (tf.tensor): High resolution tensor used to compute the loss
+            first_or_second (str): Only needed for multipass approach. Is this a first or second generator step.
+
+        Returns:
+            tuple: (computed loss of the generator, loss of the critic,
+             tensor of gradients updating the generator network parameters,
+             tensor of gradients updating the critic paramters)
+        """
         if self.is_gan is False:
             raise NotImplementedError(
                 'This is not a gan model use "generator_step" to optimize this model'
