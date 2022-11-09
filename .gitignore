@@ -3,6 +3,7 @@
 !/src
 !/code
 !/deprecated
+!/images
 !/code/*
 !/src/*.py
 !/src/*ipynb
@@ -10,3 +11,4 @@
 !/deprecates/*.py
 !/*.md
 !/*.py
+!/images/*
