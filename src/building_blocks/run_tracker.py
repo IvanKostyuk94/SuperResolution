@@ -46,6 +46,10 @@ class RunTracker:
 
     # Create files for tracking the parameters of interest
     def initialize_run(self):
+        """
+        Creates the files tracking the run as well as a checkpoint directory
+        if it does not exist yet
+        """
         if not os.path.isdir(self.check_dir):
             os.mkdir(self.check_dir)
             print(f"Created the checkpoint directory at {self.check_dir}")
@@ -70,6 +74,12 @@ class RunTracker:
 
     # Updates loss file by writing the line with additional info
     def update_loss(self, data):
+        """
+        Writes an additional line to the loss file
+
+        Args:
+            data (list): List of data to be written to the file
+        """
         if len(data) == len(self.tracked_loss_prop):
             with open(self.loss_file, "a", newline="") as loss_file:
                 writer = csv.writer(loss_file)
@@ -83,6 +93,12 @@ class RunTracker:
 
     # Updates grad file by writing the line with additional info
     def update_grad(self, data):
+        """
+        Writes an additional line to the grads file
+
+        Args:
+            data (list): List of data to be written to the file
+        """
         if len(data) == len(self.tracked_grad_prop):
             with open(self.grad_file, "a", newline="") as grad_file:
                 writer = csv.writer(grad_file)

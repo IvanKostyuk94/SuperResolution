@@ -1,5 +1,6 @@
 import tensorflow as tf
 
+
 # Define the critic loss for the first network using the Wasserstein cost fuction
 def first_critic_loss(hr_tiles, sr_tiles, lr_tiles, first_critic_model):
     # Calculate Gradient penalty

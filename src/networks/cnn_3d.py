@@ -7,11 +7,11 @@ def cnn_3d(input_batch):
     A simple 3D CNN with 3 layers which is meant to learn the changes between
     HR and LR with the LR being forwarded directly through a shortcut
 
-        Arguments:
-            batch {list}: A batch of 3D LR cubes
+    Args:
+        batch {list}: A batch of 3D LR cubes
 
-        Returns:
-            X {list}: A batch of 3D HR cubes
+    Returns:
+        X {list}: A batch of 3D HR cubes
 
     """
     X_short = input_batch

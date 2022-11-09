@@ -2,8 +2,11 @@ import os
 
 
 # Function to write the batch skript for training the network
-def write_batch_skript(training_skript, path_to_run, gpu_type):
-    """Write the batch skript to be submitted in order to train the network
+def write_batch_skript(
+    training_skript: str, path_to_run: str, gpu_type: str
+) -> None:
+    """
+    Write the batch skript to be submitted in order to train the network
 
     Args:
         training_skript (str): Python file to run
