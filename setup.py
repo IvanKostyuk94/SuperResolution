@@ -12,7 +12,7 @@ setuptools.setup(
     long_description=long_desc,
     long_description_content_type="text/markdown",
     license="GPL-3.0",
-    packages=["cosmoSR"],
+    packages=["":"src"],
     python_requires=">=3.7",
     install_requires=[
         "tensorflow",
