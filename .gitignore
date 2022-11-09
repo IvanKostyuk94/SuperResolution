@@ -9,3 +9,4 @@
 !/src/*.md
 !/deprecates/*.py
 !/*.md
+!/*.py
