@@ -2,8 +2,10 @@
 !/.gitignore
 !/src
 !/code
+!/deprecated
 !/code/*
 !/src/*.py
 !/src/*ipynb
 !/src/*.md
+!/deprecates/*.py
 !/*.md
