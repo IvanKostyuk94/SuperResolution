@@ -4,6 +4,7 @@
 !/code
 !/deprecated
 !/images
+!/run
 !/code/*
 !/src/*.py
 !/src/*ipynb
@@ -12,3 +13,4 @@
 !/*.md
 !/*.py
 !/images/*
+!/run/*
