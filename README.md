@@ -2,10 +2,6 @@
 
 A python package to train a neural network to super-resolve gridded cosmological simulations. <p>
 
-```diff
-- Note: This package is currently in development and cannot yet be used.
-```
-
 ## Description
 The idea behind this project is that for many cosmological simulation it would be convenient to have a good resolution at small scales while also have 
 fairly large simulation boxes. Unfortunately, this is often computationally not feasable. <p>
