@@ -1,58 +1,64 @@
 # cosmoSR
 
-A python package to train a neural network to super-resolve gridded cosmological simulations. <p>
+A Python package for training neural networks to super-resolve gridded cosmological simulations.
 
-## Description
-The idea behind this project is that for many cosmological simulation it would be convenient to have a good resolution at small scales while also have 
-fairly large simulation boxes. Unfortunately, this is often computationally not feasable. <p>
-Therefore, it would be good to have a tool which given a simulation at lower resolution, is able to take that simulation and generate small scale 
-structures within it. <p>
-This could be done in the following way:
-1. Run the large simulation box requiered
-2. Run two small simulation boxes, one with the resolution of the large scale simulation and another one with a better resolution.
-3. Generate a training sample from the above simulations using this toolkit.
-4. Train a neural network to generate the small scale structures into the simulation box with the smaller resolution using this toolkit.
-5. Use the trained network to generate small scale structures into the large scale simulation.
+## Motivation
 
-Here is an example of the 2D projected results of a super-resolution using a neural network:
-<figure>
-<div class="row">
-  <div class="column">
-<img src="/images/lr.png" alt="drawing" width="200"/>
-<img src="/images/l_all_sr.png" alt="drawing" width="200"/>
-<img src="/images/hr.png" alt="drawing" width="200"/> <br>
+Running cosmological simulations at high resolution across a large volume is computationally prohibitive. `cosmoSR` addresses this by learning the mapping from low-resolution to high-resolution density fields using a pair of small reference simulations — then applying that mapping to a large, affordable low-resolution box.
 
-<figcaption>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Low resolution 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp&nbsp;&nbsp;
-Super resolution &nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;
-High resolution</figcaption>
-</figure>&nbsp;&nbsp;
+The workflow is:
+
+1. Run the large low-resolution simulation box you need.
+2. Run two small boxes at matched resolution: one at low resolution and one at high resolution.
+3. Generate a training sample from the small boxes using this toolkit.
+4. Train a neural network to predict the high-resolution structure from the low-resolution input.
+5. Apply the trained network to the full large box.
+
+Here is an example of 2D-projected results:
+
+| Low resolution | Super resolution | High resolution |
+|:-:|:-:|:-:|
+| ![LR](images/lr.png) | ![SR](images/l_all_sr.png) | ![HR](images/hr.png) |
 
 ## Installation
-```
-https://github.com/IvanKostyuk94/SuperResolution.git
+
+```bash
+git clone https://github.com/IvanKostyuk94/SuperResolution.git
 cd SuperResolution
 pip install .
 ```
 
-## User guide
-1. Copy the run directory
-2. Move the low and high resolution simulation you want to use for training into the 'input_data'
-3. Adjust the parameters in 'config.py'
-4. Run 'run.py'
-5. The trained network can now be retrieved in TBD
+**Requirements:** Python ≥ 3.7, TensorFlow, NumPy.
 
-## Organization
-- run/ -contains 'config.py' and 'run.py' should be copied in every new training directory
-- src/ -contains code to build the package
-  - loss/ -contains different losses. Each module should contain one set of losses for a network. E.g. for a GAN model it should contain the loss of the generator and of the critic.
-  - networks/ -contains functions of the neural networks that can be trained. Each module should contain the networks for one model. E.g. one generator and one critic function for a GAN model.  
-  - building_blocks/ -Contains classes to build a trainable neural networks out of the network functions, opitimizers and losses.
-  - network_trainer.py -Class which builds a trainable model out of the building blocks
-  - utils.py -Contains helpfull functions for preparing runs
-- deprecated/ -contains deprecated code only needed for the development process
-- images/ =a few example images used in this README
+## Quick start
 
+1. Copy the `run/` directory to your working directory.
+2. Place your low- and high-resolution simulation data in `input_data/`.
+3. Edit `config.py` to match your data paths and training parameters.
+4. Run the pipeline:
+
+```bash
+python run.py
+```
+
+The trained network weights will be saved to your configured output directory.
+
+## Repository layout
+
+```
+cosmoSR/
+├── run/                  # Copy this to each new training directory
+│   └── config.py         # All user-facing parameters live here
+├── src/
+│   ├── networks/         # Neural network architectures (one module per model)
+│   ├── loss/             # Loss functions (one module per model, e.g. generator + critic for a GAN)
+│   ├── building_blocks/  # Classes that assemble networks, optimizers, and losses into a trainable model
+│   ├── network_trainer.py# Top-level trainer that wires the building blocks together
+│   └── utils.py          # Helpers for data preparation and run management
+├── images/               # Example images used in this README
+└── deprecated/           # Old code retained for reference only
+```
+
+## License
+
+GPL-3.0 — see [LICENSE](LICENSE).
